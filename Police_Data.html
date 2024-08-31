@@ -12,6 +12,7 @@
 </head>
 
 <body>
+    
     <!-- Header + webpage information-->
     <div id="head_div" class="flexbox">
 
@@ -31,33 +32,58 @@
     </div>
     <!-- Main data box-->
     <div class="container text-centre" id="main_area">
-        
-            <div class="row  justify-content-around">
-                <!-- Data selection col -->
-                <div class="col" id="input_col">
-                    <form action="">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <label for="postcode">Postcode [SK21 2NE]</label>
-                                    <input type="text" id="postcode">
-                                    <button class="text-safe" id="Submit">Submit</button>
-                                </tr>
-                            </tbody>
 
-                        </table>
-                    </form>
-                </div>
-                <!-- Data output col-->
-                <div class="col" id="output_col">
+        <div class="row  justify-content-around">
+            <!-- Data selection col -->
+            <div class="col" id="input_col">
+                <form>
                     <table>
-                        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil ducimus totam dolor aliquid
-                            natus! Esse, odio quidem id quod tempore debitis eveniet ut recusandae mollitia qui rem unde
-                            sequi suscipit.</p>
+                        <tbody>
+                            <tr class="col">
+                                <div>
+                                    <label for="postcode" class="form-label">Postcode [SK21 2NE]</label>
+                                    <input type="text" id="postcode" class="form-control" maxlength="7">
+                                </div>
+                            </tr>
+                            <tr>
+                                <label for="dateTime" class="form-label">Year and month</label>
+                                <input type="date" id="form-label" class="form-control" min="2015-01-01" step="7" >
+                                
+                            </tr>
+                            <tr>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                                        type="button" aria-expanded="false">
+                                        Data Set range 2
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#">item1</a></li>
+                                        <li><a class="dropdown-item" href="#">item1</a></li>
+                                    </ul>
+                                </div>
+                            </tr>
+                            <tr>
+                                <button class="text-safe" id="Submit">Submit</button>
+                            </tr>
+                        </tbody>
+
                     </table>
-                </div>
+                </form>
             </div>
-        
+            <!-- Data output col-->
+            <div class="col" id="output_col">
+                <table>
+                    <th>
+                    <th class=""></th>
+
+                    </th>
+                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil ducimus totam dolor aliquid
+                        natus! Esse, odio quidem id quod tempore debitis eveniet ut recusandae mollitia qui rem unde
+                        sequi suscipit.</p>
+                </table>
+            </div>
+        </div>
+
 
     </div>
 
