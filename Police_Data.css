@@ -14,6 +14,7 @@
     display:flex;
     flex-wrap: wrap;
     align-items:center;
+   
     
     flex-shrink: 1;
     flex-grow: 2;
@@ -21,7 +22,8 @@
 }
 
 #img_div {
-    flex-shrink: ;
+    
+    flex-shrink: 10;
     flex-grow: 1;
     flex-basis: 25%;
 }
@@ -43,11 +45,18 @@ h1 {
 p {
     font-size: small;
 }
+
+
 @media only screen and (min-width:1000px){
+    #img_div{
+        width: 230px;
+        height: 230px;
+    }
     #img_div img {
         width:225px;
         height: 225px;
         border-bottom-right-radius: 0%;
+
     }
     h1 {
         font-size: x-large;
