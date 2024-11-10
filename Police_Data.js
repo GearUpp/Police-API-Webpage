@@ -22,21 +22,21 @@ async function query() {
 
     //console.log(data);
     //console.log(crimeList);
-    populateDropMenu();
+    populateDropMenu(await crimeList);
 
 };
 query(); //Auto call
 // calls function that auto populates dropdown menu
 
 // Populates Dropdown menu
-function populateDropMenu() {
-    crimeList.forEach(crime => {
+function populateDropMenu(x) {
+    x.forEach(crime => {
         let createLI = document.createElement("li");
         let createA = document.createElement("a");
 
-        document.querySelector("#Crime_Drop ul:last-child").appendChild(createLI).appendChild(createA).className = "dropdown-item";
-        document.querySelector("#Crime_Drop li:last-child a").innerHTML = crime.name;
-        document.querySelector("#Crime_Drop li:last-child a").id = crime.url;  // save url in anchers id for later retrival
+        document.querySelector(".dropdown-menu").appendChild(createLI).appendChild(createA).className = "dropdown-item";
+        document.querySelector(".dropdown-menu li:last-child a").innerHTML = crime.name;
+        document.querySelector(".dropdown-menu li:last-child a").id = crime.url;  // save url in anchers id for later retrival
 
     });
 

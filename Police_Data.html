@@ -56,10 +56,12 @@
                                         data-bs-toggle="dropdown">
                                         Crime type
                                     </button>
-                                    <ul class="dropdown-menu" >
+                                    <ul class="dropdown-menu">
+
                                     </ul>
-                                    <input type="date">
+                                    <input id="date" type="date" min="01/01/2010" >
                                 </div>
+                                
                             </tr>
                             <tr>
                                 <button class="text-safe" id="Submit">Submit</button>
@@ -72,7 +74,7 @@
             </div>
             <!-- Data output col-->
             <div class="col" id="output_col">
-                <table id="outputTable" class="table-bordered table-striped table-sm table-responsive-xl">
+                <table id="outputTable" class="table-bordered table-striped  table-responsive-xl">
                     <thead>
                         <tr>
                             <th>ID</th>

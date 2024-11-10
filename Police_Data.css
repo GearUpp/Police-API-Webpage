@@ -45,7 +45,9 @@ h1 {
 p {
     font-size: small;
 }
-
+#date {
+    max-width: 120px;
+}
 
 @media only screen and (min-width:1000px){
     #img_div{
