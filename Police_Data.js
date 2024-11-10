@@ -156,6 +156,8 @@ async function PoliceDataFetch(CrimeFlag) {
 //All Police API Requests
 
 function PopulateTable(data) {
+
+
     data.forEach(event => {
         document.querySelector("#Status").innerHTML = "Status: Populating Table"
             var data = [event.id || 'Missing Data', event.month || 'Missing Data', (event.location && event.location.street && event.location.street.name) || 'Missing Data', 
@@ -164,7 +166,7 @@ function PopulateTable(data) {
 
         let createTr = document.createElement("tr");
         try {
-            document.querySelector("#outputTable tbody").appendChild(createTr);
+            document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
             for(let x = 0; x <= 4; x++){
                 document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
             }
@@ -173,6 +175,6 @@ function PopulateTable(data) {
             console.log("Missing Data, Error " + error)
 
         };
-        document.querySelector("#Status").innerHTML = "Status: Table populated, using date: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in area: ", postcode);
+        document.querySelector("#Status").innerHTML = "Status: Table populated, using date: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in area: ", postcode, );
     });
 };
