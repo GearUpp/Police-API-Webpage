@@ -18,9 +18,8 @@
 
         <div id="header_div">
             <h1>Police Data Analysis</h1>
-            <p>You can type a valid postcode and any avalible police data via their API will be displayed based on your
-                data type selected.
-                If no data specificity is selected, default feilds will be called.
+            <p>Using stadard Metropolitan Police API, you can request all or specific crime based on a postcode, using
+                postcode.io service, a lang / long data is provided to the Police API
             </p>
 
         </div>
@@ -35,7 +34,7 @@
     <!-- Main data box-->
     <div class="container text-centre" id="main_area">
 
-        <div class="row  justify-content-around ">
+        <div class="col  justify-content-centre  ">
 
             <!-- Data selection col -->
             <div class="col" id="input_col">
@@ -45,25 +44,26 @@
                             <tr class="col">
                                 <div>
                                     <label for="postcode" class="form-label">Postcode [SK21 2NE]</label>
-                                    <input type="text" id="postcode" class="form-control"  maxlength="8" pattern="^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})$">
+                                    <input type="text" id="postcode" class="form-control" maxlength="8"
+                                        pattern="^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})$">
                                 </div>
                             </tr>
-                           
+
 
                             <tr>
                                 <div class="dropdown" id="Crime_Drop">
-                                    <button class="btn btn-danger dropdown-toggle" 
-                                        type="button" aria-expanded="false" data-bs-toggle="dropdown">
+                                    <button class="btn btn-danger dropdown-toggle" type="button" aria-expanded="false"
+                                        data-bs-toggle="dropdown">
                                         Crime type
                                     </button>
-                                    <ul class="dropdown-menu">
-                                        
+                                    <ul class="dropdown-menu" >
                                     </ul>
+                                    <input type="date">
+                                </div>
                             </tr>
                             <tr>
                                 <button class="text-safe" id="Submit">Submit</button>
-                                <p> You must select date and crime type, you can then choose location by force or
-                                    postcode</p>
+                                <p> Postcode Mandatory, Crime optional</p>
                             </tr>
                         </tbody>
 
@@ -72,14 +72,19 @@
             </div>
             <!-- Data output col-->
             <div class="col" id="output_col">
-                <table>
-                    <th>
-                    <th class=""></th>
+                <table id="outputTable" class="table-bordered table-striped table-sm table-responsive-xl">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Street</th>
+                            <th>Category</th>
+                            <th>Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
-                    </th>
-                    <p id="output_area">Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nihil ducimus totam dolor aliquid
-                        natus! Esse, odio quidem id quod tempore debitis eveniet ut recusandae mollitia qui rem unde
-                        sequi suscipit.</p>
+                    </tbody>
                 </table>
             </div>
         </div>

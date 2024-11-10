@@ -59,7 +59,7 @@ p {
 
     }
     h1 {
-        font-size: x-large;
+        font-size: xx-large;
     }
     p {
         font-size: large;
@@ -87,11 +87,12 @@ p {
 }
 
 #input_col {
+    
     border-color: #0032A1;
     border-width: 2px;
     border-style: solid;
     padding: 2px;
-    margin-right: 20px;
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
     button {

@@ -6,20 +6,9 @@ let currentDate = (new Date().getFullYear() + "-" + (new Date().getMonth() - 1))
 let PostcodeData = ""; //Postcode.io API var to all postcode related data from the API
 let crimeList = "";
 let CrimeSelected = []; //DropDown Selection var [Name , url]
-let QueryResponse = ""; //Full data response from form
+let QueryResponse; //Full data response from Police API Request
 
 
-
-//Location Selected visual help
-function locationSelection(location) {
-    document.querySelector("label").innerHTML = location
-}
-
-document.querySelector("input").addEventListener("click", function () {
-    locationSelection("Search by Postcode, Format [SK21 2NE]");
-})
-
-//Location Selected visual help
 
 
 
@@ -92,13 +81,23 @@ document.querySelector("#Submit").addEventListener("click", async function (even
     postcode = document.getElementById("postcode").value;
     // Wait for the postcode validation to complete
     PostcodeData = await postcodeValidate(postcode);
-    
-    if (PostcodeData) {
 
-        if (CrimeSelected[0]) {
-            await PoliceDataFetch(true);
+    if (PostcodeData) {
+        if (!CrimeSelected[0]) { // Checks that no crime or all Crimes is selected
+            if (await PoliceDataFetch(false)) {
+                PopulateTable(await QueryResponse)
+            } else {
+                console.log("Cannot output null data, failed to fetch")
+            }
+
         } else {
-            await PoliceDataFetch(false);
+            if (CrimeSelected[0]) { // Checks that some specific Crime is selected
+                if (await PoliceDataFetch(true)) {
+                    PopulateTable(await QueryResponse)
+                } else {
+                    console.log("Cannot output null data, failed to fetch")
+                }
+            }
         }
     } else {
         alert("Please provide a valid postcode!");
@@ -113,24 +112,55 @@ document.querySelector("#Crime_Drop ul").addEventListener('click', function (a) 
     CrimeSelected[0] = a.target.innerHTML;
     CrimeSelected[1] = a.target.id;
 
-
 });
 // Identify Crime selected
 
 
 //All Police API Requests
 async function PoliceDataFetch(CrimeFlag) {
+    var QueryResponseRAW;
+    try {
+        if (CrimeFlag == true) {
+            //console.log(PoliceAPI + "crimes-street/" + CrimeSelected[1] + "?&date=" + currentDate + "&lat=" + PostcodeData["latitude"].toString() + "&lng=" + PostcodeData["longitude"].toString())
+            QueryResponseRAW = await fetch(PoliceAPI + "crimes-street/" + CrimeSelected[1] + "?&date=" + currentDate + "&lat=" + PostcodeData["latitude"].toString() + "&lng=" + PostcodeData["longitude"].toString());
 
-    if (CrimeFlag == true) {
-        console.log(PoliceAPI + "crimes-street/" + CrimeSelected[1] + "?&date=" + currentDate + "&lat=" + PostcodeData["latitude"].toString() + "&lng=" + PostcodeData["longitude"].toString())
-        var QueryResponseRAW = await fetch(PoliceAPI + "crimes-street/" + CrimeSelected[1] + "?&date=" + currentDate + "&lat=" + PostcodeData["latitude"].toString() + "&lng=" + PostcodeData["longitude"].toString());
-        
-    } else {
-        var QueryResponseRAW = await fetch(PoliceAPI + "crimes-street/all-crime?&date=" + currentDate + "&lat=" + PostcodeData["latitude"].toString() + "&lng=" + PostcodeData["longitude"].toString());
-    };
-    console.log("Done Fetching")
-    QueryResponse = await QueryResponseRAW.json();
-    console.log(QueryResponse);
-    document.getElementById("output_area").innerHTML = QueryResponse;
-}
-//All Police API Asyn Functions
+        } else {
+            QueryResponseRAW = await fetch(PoliceAPI + "crimes-street/all-crime?&date=" + currentDate + "&lat=" + PostcodeData["latitude"].toString() + "&lng=" + PostcodeData["longitude"].toString());
+        };
+        console.log("Fetch done")
+
+        if (QueryResponseRAW) {
+            QueryResponseRAW = await QueryResponseRAW.json();
+            QueryResponse = QueryResponseRAW
+            console.log(QueryResponse)
+        }
+
+        //then(PopulateTable(QueryResponse))
+        return true
+    } catch (error) {
+        console.log("Failed to Fetch, Error: " + error);
+        alert("Something went wrong, try again by reloading the page");
+        return false;
+    }
+};
+//All Police API Requests
+
+function PopulateTable(data) {
+    data.forEach(event => {
+        console.log(event.outcome_status && event.outcome_status.category)
+            var data = [event.id || 'Missing Data', event.month || 'Missing Data', (event.location && event.location.street && event.location.street.name) || 'Missing Data', 
+                        event.category || 'Missing Data', (event.outcome_status && event.outcome_status.category) || 'Missing Data'];
+
+
+        let createTr = document.createElement("tr");
+        try {
+            document.querySelector("#outputTable tbody").appendChild(createTr);
+            for(let x = 0; x <= 4; x++){
+                document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
+            }
+        } catch (error) {
+            console.log("Missing Data, Error " + error)
+
+        };
+    });
+};
