@@ -48,6 +48,7 @@ function populateDropMenu(x) {
 //validates and returns either full lang&long queury string or a false based on given POSTCODE
 async function postcodeValidate(postcode) {
     if (postcoderegx.test(postcode)) {
+        document.querySelector("#Status").innerHTML = "Status: Validating postcode"
         var postcode_data = await fetch("https://api.postcodes.io/postcodes/" + postcode);
         var PostcodeData_Raw = await postcode_data.json();
         console.log(PostcodeData_Raw)
@@ -60,6 +61,7 @@ async function postcodeValidate(postcode) {
         } else {
 
             alert("Postcode " + postcode + " is invalid according to postcodes.io !");
+            document.querySelector("#Status").innerHTML = "Invalid Postcode Enteredr"
             return false
 
         }
@@ -76,14 +78,19 @@ async function postcodeValidate(postcode) {
 
 //Click will initiate all relevant functions to validate postcode, find lang & long of postcode, 
 document.querySelector("#Submit").addEventListener("click", async function (event) {
+    document.querySelector("#Status").innerHTML = "Status: Submitting variables to API"
     event.preventDefault(); // Prevents the default form submission behavior
-
+    if(document.querySelector("#date").value) {
+        document.querySelector("#Status").innerHTML = "Status: Date Selected"
+        currentDate = document.querySelector("#date").value.substring(0,7)
+    }
     postcode = document.getElementById("postcode").value;
     // Wait for the postcode validation to complete
     PostcodeData = await postcodeValidate(postcode);
 
     if (PostcodeData) {
         if (!CrimeSelected[0]) { // Checks that no crime or all Crimes is selected
+            document.querySelector("#Status").innerHTML = "Status: Crime Selected"
             if (await PoliceDataFetch(false)) {
                 PopulateTable(await QueryResponse)
             } else {
@@ -92,6 +99,7 @@ document.querySelector("#Submit").addEventListener("click", async function (even
 
         } else {
             if (CrimeSelected[0]) { // Checks that some specific Crime is selected
+                document.querySelector("#Status").innerHTML = "Status: Crime not Selected"
                 if (await PoliceDataFetch(true)) {
                     PopulateTable(await QueryResponse)
                 } else {
@@ -109,6 +117,7 @@ document.querySelector("#Submit").addEventListener("click", async function (even
 // Identify  Crime selected
 
 document.querySelector("#Crime_Drop ul").addEventListener('click', function (a) {
+    document.querySelector("#Status").innerHTML = "Status:  '".concat(a.target.innerHTML, " 'Selected" ) 
     CrimeSelected[0] = a.target.innerHTML;
     CrimeSelected[1] = a.target.id;
 
@@ -118,6 +127,7 @@ document.querySelector("#Crime_Drop ul").addEventListener('click', function (a) 
 
 //All Police API Requests
 async function PoliceDataFetch(CrimeFlag) {
+    document.querySelector("#Status").innerHTML = "Status: Fetching Data"
     var QueryResponseRAW;
     try {
         if (CrimeFlag == true) {
@@ -147,7 +157,7 @@ async function PoliceDataFetch(CrimeFlag) {
 
 function PopulateTable(data) {
     data.forEach(event => {
-        console.log(event.outcome_status && event.outcome_status.category)
+        document.querySelector("#Status").innerHTML = "Status: Populating Table"
             var data = [event.id || 'Missing Data', event.month || 'Missing Data', (event.location && event.location.street && event.location.street.name) || 'Missing Data', 
                         event.category || 'Missing Data', (event.outcome_status && event.outcome_status.category) || 'Missing Data'];
 
@@ -159,8 +169,10 @@ function PopulateTable(data) {
                 document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
             }
         } catch (error) {
+            document.querySelector("#Status").innerHTML = "Status: Catching errors within API data"
             console.log("Missing Data, Error " + error)
 
         };
+        document.querySelector("#Status").innerHTML = "Status: Table populated, using date: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in area: ", postcode);
     });
 };
