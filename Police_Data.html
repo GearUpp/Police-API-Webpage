@@ -18,7 +18,7 @@
 
         <div id="header_div">
             <h1>Police Data Analysis</h1>
-            <p>Using stadard Metropolitan Police API, you can request all or specific crime based on a postcode, using
+            <p>Using Metropolitan Police API, you can request all or specific crime based on a England only postcode, using
                 postcode.io service, a lang / long data is provided to the Police API. Multiple Searchs will result in new data being added to the bottom, otherwise reload to get a fresh table.
             </p>
 
@@ -34,25 +34,23 @@
     <!-- Main data box-->
     <div class="container text-centre" id="main_area">
 
-        <div class="col  justify-content-centre  ">
+        <div class="col  justify-content-start  ">
 
             <!-- Data selection col -->
             <div class="col" id="input_col">
                 <form>
                     <table>
                         <tbody>
-                            <tr class="col">
+                            <tr class="row">
                                 <div>
                                     <label for="postcode" class="form-label">Postcode [SK21 2NE]</label>
                                     <input type="text" id="postcode" class="form-control" maxlength="8"
                                         pattern="^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})$">
                                 </div>
                             </tr>
-
-
                             <tr>
                                 <div class="dropdown" id="Crime_Drop">
-                                    <button class="btn btn-danger dropdown-toggle" type="button" aria-expanded="false"
+                                    <button class="btn btn-outline-secondary dropdown-toggle" type="button" aria-expanded="false"
                                         data-bs-toggle="dropdown">
                                         Crime type
                                     </button>
@@ -64,7 +62,8 @@
                                 
                             </tr>
                             <tr>
-                                <button class="text-safe" id="Submit">Submit</button>
+                                <button class="text-safe btn btn-outline-dark" id="Submit">Submit</button>
+                                <button class="text-safe btn btn-outline-danger " onclick="location.reload()" id="Reload">↻</button>
                                 <p id="Status">Status:</p>
                             </tr>
                         </tbody>
@@ -72,10 +71,14 @@
                     </table>
                 </form>
             </div>
+            <div id="Filter">
+                <input class="FilterBox" id="idFilter" type="number" placeholder="Filter by ID">
+                <input class="FilterBox" id="streetFilter" type="text" placeholder="Filter by street name">
+            </div>
             <!-- Data output col-->
             <div class="col" id="output_col">
-                <table id="outputTable" class="table-bordered table-striped  table-responsive-xl">
-                    <thead>
+                <table id="outputTable" class="table table-bordered table-striped  table-responsive-xl">
+                    <thead class="thead-dark">
                         <tr>
                             <th>ID</th>
                             <th>Date</th>

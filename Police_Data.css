@@ -119,8 +119,19 @@ p {
 }
 /* Submit Area styles */
 
-
-
+#Reload {
+    transform: rotate(90deg);
+      
+}
+#Filter {
+    display: flex;
+    justify-content: start;
+    flex-flow: wrap;
+    margin-bottom: 1%;
+}
+.FilterBox {
+    margin-right: 2%;
+}
 body {
     background-color: #b9b9b9 !important;
 }
