@@ -10,19 +10,28 @@ let QueryResponse; //Full data response from Police API Request
 
 
 function filter(filterSelector) {
-    if(filterSelector = "ID"){
-        var searchparameter = document.querySelector("#idFilter").innerHTML();
+    if (filterSelector = "ID") {
+        var searchparameter = document.querySelector("#idFilter").innerHTML.toString().toUpperCase();
         var row = 0;
     } else {
-        var searchparameter = document.querySelector("#streetFilter").innerHTML();
-        var row = 3;
+        if (filterSelector = "Street") {
+            var searchparameter = document.querySelector("#streetFilter").innerHTML.toString().toUpperCase();
+            var row = 3;
+        }
+
     }
     var table = document.querySelector("#outputTable tbody");
-    var searching = true;
-    while(searching = true){
-        
-    }
-}
+    var tr = table.getElementsByTagName("tr");
+
+    for (i = 0; i < tr.length; i++) {
+        var Text = tr[i].childNodes[row].innerHTML.toString().toUpperCase() || tr[i].childNodes[row].innnerText.toString().toUpperCase();
+        if (Text.indexOf(searchparameter)  > -1) {
+            tr[i].style.display = "";
+        } else {
+            tr[i].style.display = "none";
+        };
+    };
+};
 
 
 // calls function that auto populates dropdown menu
@@ -94,9 +103,9 @@ async function postcodeValidate(postcode) {
 document.querySelector("#Submit").addEventListener("click", async function (event) {
     document.querySelector("#Status").innerHTML = "Status: Submitting variables to API"
     event.preventDefault(); // Prevents the default form submission behavior
-    if(document.querySelector("#date").value) {
+    if (document.querySelector("#date").value) {
         document.querySelector("#Status").innerHTML = "Status: Date Selected"
-        currentDate = document.querySelector("#date").value.substring(0,7)
+        currentDate = document.querySelector("#date").value.substring(0, 7)
     }
     postcode = document.getElementById("postcode").value;
     // Wait for the postcode validation to complete
@@ -127,7 +136,7 @@ document.querySelector("#Submit").addEventListener("click", async function (even
 // Identify  Crime selected
 
 document.querySelector("#Crime_Drop ul").addEventListener('click', function (a) {
-    document.querySelector("#Status").innerHTML = "Status:  '".concat(a.target.innerHTML, " 'Selected" ) 
+    document.querySelector("#Status").innerHTML = "Status:  '".concat(a.target.innerHTML, " 'Selected")
     CrimeSelected[0] = a.target.innerHTML;
     CrimeSelected[1] = a.target.id;
 
@@ -159,9 +168,9 @@ async function PoliceDataFetch(CrimeFlag) {
                 console.log("Failed to extract API data, Error: " + error);
                 document.querySelector("#Status").innerHTML = "Status: Failed to extract data from Police API."
             }
-            
+
         } else {
-            console.log("Failed to extract API data, return code: " + QueryResponseRAW.status );
+            console.log("Failed to extract API data, return code: " + QueryResponseRAW.status);
             document.querySelector("#Status").innerHTML = "Status: Failed to fetch data from Police API. "
             return false
         }
@@ -171,9 +180,9 @@ async function PoliceDataFetch(CrimeFlag) {
     } catch (error) {
         console.log("Failed to Fetch, Error: " + error);
         document.querySelector("#Status").innerHTML = "Status: Failed to fetch data from Police API."
-        
+
         return false;
-    } 
+    }
 };
 //All Police API Requests
 
@@ -182,14 +191,14 @@ function PopulateTable(data) {
 
     data.forEach(event => {
         document.querySelector("#Status").innerHTML = "Status: Populating Table"
-            var data = [event.id || 'Missing Data', event.month || 'Missing Data', (event.location && event.location.street && event.location.street.name) || 'Missing Data', 
-                        event.category || 'Missing Data', (event.outcome_status && event.outcome_status.category) || 'Missing Data'];
+        var data = [event.id || 'Missing Data', event.month || 'Missing Data', (event.location && event.location.street && event.location.street.name) || 'Missing Data',
+        event.category || 'Missing Data', (event.outcome_status && event.outcome_status.category) || 'Missing Data'];
 
 
         let createTr = document.createElement("tr");
         try {
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
-            for(let x = 0; x <= 4; x++){
+            for (let x = 0; x <= 4; x++) {
                 document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
             }
         } catch (error) {
@@ -197,6 +206,6 @@ function PopulateTable(data) {
             console.log("Missing Data, Error " + error)
 
         };
-        document.querySelector("#Status").innerHTML = "Status: Table populated, using date: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in area: ", postcode, );
+        document.querySelector("#Status").innerHTML = "Status: Table populated, using date: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in area: ", postcode,);
     });
 };
