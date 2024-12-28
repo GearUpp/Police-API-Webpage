@@ -48,12 +48,12 @@
             <div class="col" id="input_col">
                 <form>
                     <div>
-                        <label for="postcode" class="form-label">Postcode [SK21 2NE]</label>
 
+                        <label for="postcode" id="marker" class="form-label"> Police API data is normally 2 month old!!</label>
                     </div>
 
                     <div class="dropdown" id="Crime_Drop">
-                        <input type="text" id="postcode" class="form-control" maxlength="8"
+                        <input type="text" id="postcode" class="form-control" maxlength="8" placeholder="Postcode e.g.[SK21 2NE]"
                             pattern="^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})$">
                     </div>
                     <input id="date" type="date" min="01/01/2010" >
@@ -67,6 +67,7 @@
 
                     <button class="text-safe btn btn-outline-dark" id="Submit">Submit</button>
                     <button class="text-safe btn btn-outline-danger " onclick="location.reload()" id="Reload">↻</button>
+                    
                     <p id="Status">Status:</p>
 
                 </form>

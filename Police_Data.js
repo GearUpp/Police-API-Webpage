@@ -7,7 +7,8 @@ let PostcodeData = ""; //Postcode.io API var to all postcode related data from t
 let crimeList = "";
 let CrimeSelected = []; //DropDown Selection var [Name , url]
 let QueryResponse; //Full data response from Police API Request
-//document.querySelector("#date").createAttribute("max=".concat())
+
+//document.querySelector("#date").createAttribute("max=" + currentDate.concat); //Limit how close to current date user can select as data is rarely very up to date, 2 month lag
 
 //Map Area
 
@@ -206,7 +207,7 @@ async function PoliceDataFetch(CrimeFlag) {
 
 function PopulateTable(data) {
 
-    if(!data){ //Important check to see if their is any data avalible from the API, ussually means the data is not yet avalible for this date 
+    if(data.length == 0){ //Important check to see if their is any data avalible from the API, ussually means the data is not yet avalible for this date 
         document.querySelector("#Status").innerHTML = "Status: No data yet for the ".concat(document.querySelector("#date").value);
         return
     };
@@ -222,7 +223,7 @@ function PopulateTable(data) {
         try {
             console.log(event.location.latitude)
             console.log(event)
-            L.marker([event.location.latitude, event.location.longitude]).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " Happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p"));
+            L.marker([event.location.latitude, event.location.longitude]).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p"));
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
             for (let x = 0; x <= 4; x++) { //loops thought 5 table rows, using x to populate table with the var data
                 document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
