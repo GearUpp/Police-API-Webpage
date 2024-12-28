@@ -7,7 +7,7 @@ let PostcodeData = ""; //Postcode.io API var to all postcode related data from t
 let crimeList = "";
 let CrimeSelected = []; //DropDown Selection var [Name , url]
 let QueryResponse; //Full data response from Police API Request
-document.querySelector("#date").createAttribute("max=".concat())
+//document.querySelector("#date").createAttribute("max=".concat())
 
 //Map Area
 
@@ -214,22 +214,22 @@ function PopulateTable(data) {
 
     data.forEach(event => {
         document.querySelector("#Status").innerHTML = "Status: Populating Table"
-        var data = [event.id || 'Missing Data', event.month || 'Missing Data', (event.location && event.location.street && event.location.street.name) || 'Missing Data',
-        event.category || 'Missing Data', (event.outcome_status && event.outcome_status.category) || 'Missing Data']; // Creates an array and fills gaps to prevent breaking of the table population function below
+        var data = [event.id || 'Data Missing', event.month || 'Data Missing', (event.location && event.location.street && event.location.street.name) || 'Data Missing',
+        event.category || 'Data Missing', (event.outcome_status && event.outcome_status.category) || 'Data Missing']; // Creates an array and fills gaps to prevent breaking of the table population function below
         
        
         let createTr = document.createElement("tr");
         try {
             console.log(event.location.latitude)
             console.log(event)
-            L.marker([event.location.latitude, event.location.longitude]).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h21><br>" , "<p id='marker'>" , data[3] , " Happened " , data[2] , " on the " , data[1]) , "</p");
+            L.marker([event.location.latitude, event.location.longitude]).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " Happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p"));
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
             for (let x = 0; x <= 4; x++) { //loops thought 5 table rows, using x to populate table with the var data
                 document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
             }
         } catch (error) {
             document.querySelector("#Status").innerHTML = "Status: Catching errors within API data"
-            console.log("Missing Data, Error " + error)
+            console.log("Data Missing, Error " + error)
 
         };
         document.querySelector("#Status").innerHTML = "Status: Table Filled, date used: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in: ", postcode,);

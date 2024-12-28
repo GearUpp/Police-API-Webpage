@@ -49,13 +49,29 @@ h1 {
     color: #ffffff !important; 
     font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
+
 p {
-    background-color: #b9b9b9cc;
-    
-    
+    background-color: #b9b9b9cc; 
     color: #ffffff;
     font-size: small;
 }
+
+/* Marker Style*/
+h2 { 
+    font-size: small;
+    color: #000000; 
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+#marker {
+    font-size: medium;
+    
+    background-color: transparent;
+    color: black;
+}
+/* Marker Style*/  
+
+
 #date {
     max-width: 120px;
 }
