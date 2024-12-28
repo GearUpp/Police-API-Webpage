@@ -7,29 +7,40 @@ let PostcodeData = ""; //Postcode.io API var to all postcode related data from t
 let crimeList = "";
 let CrimeSelected = []; //DropDown Selection var [Name , url]
 let QueryResponse; //Full data response from Police API Request
+document.querySelector("#date").createAttribute("max=".concat())
+
+//Map Area
+
+var map = L.map('map').setView([53.38, -2.7], 5);
 
 
-function filter(filterSelector) {
-    if (filterSelector = "ID") {
-        var searchparameter = document.querySelector("#idFilter").innerHTML.toString().toUpperCase();
-        var row = 0;
-    } else {
-        if (filterSelector = "Street") {
-            var searchparameter = document.querySelector("#streetFilter").innerHTML.toString().toUpperCase();
-            var row = 3;
-        }
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+}).addTo(map);
+//Map Area
 
-    }
+function filter() {
+    var idSearch, idRow, streetRow, streetSearch;
+    idSearch = document.querySelector("#idFilter").value.toString().toUpperCase();
+    idRow = 0;
+
+    streetSearch = document.querySelector("#streetFilter").value.toString().toUpperCase();
+    streetRow = 2;
+
+
+
     var table = document.querySelector("#outputTable tbody");
     var tr = table.getElementsByTagName("tr");
-
     for (i = 0; i < tr.length; i++) {
-        var Text = tr[i].childNodes[row].innerHTML.toString().toUpperCase() || tr[i].childNodes[row].innnerText.toString().toUpperCase();
-        if (Text.indexOf(searchparameter)  > -1) {
+        var idText = tr[i].childNodes[idRow].innerHTML.toString().toUpperCase() || tr[i].childNodes[idRow].innnerText.toString().toUpperCase();
+        var streetText = tr[i].childNodes[streetRow].innerHTML.toString().toUpperCase() || tr[i].childNodes[streetRow].innnerText.toString().toUpperCase();
+        if (idText.indexOf(idSearch) > -1 &&  streetText.indexOf(streetSearch) > -1) {
             tr[i].style.display = "";
         } else {
             tr[i].style.display = "none";
         };
+        console.log("idText: "+ idText + " idSearch: " + idSearch + "idSearch: "+ idSearch)
     };
 };
 
@@ -79,6 +90,7 @@ async function postcodeValidate(postcode) {
             //Returns formated lang and long for postcode ready to be inserted into any Police data API
             console.log("lat=" + PostcodeData_Raw.result.latitude + "&lng=" + PostcodeData_Raw.result.longitude);
             PostcodeData = { "latitude": PostcodeData_Raw.result.latitude, "longitude": PostcodeData_Raw.result.longitude };
+            map.setView([PostcodeData.latitude,PostcodeData.longitude], 13);
             return PostcodeData;
         } else {
 
@@ -101,18 +113,23 @@ async function postcodeValidate(postcode) {
 
 //Click will initiate all relevant functions to validate postcode, find lang & long of postcode, 
 document.querySelector("#Submit").addEventListener("click", async function (event) {
+
     document.querySelector("#Status").innerHTML = "Status: Submitting variables to API"
     event.preventDefault(); // Prevents the default form submission behavior
+
     if (document.querySelector("#date").value) {
         document.querySelector("#Status").innerHTML = "Status: Date Selected"
         currentDate = document.querySelector("#date").value.substring(0, 7)
     }
+
     postcode = document.getElementById("postcode").value;
     // Wait for the postcode validation to complete
     PostcodeData = await postcodeValidate(postcode);
 
     if (PostcodeData) {
+
         if (!CrimeSelected[0]) { // Checks that no crime or all Crimes is selected
+
             document.querySelector("#Status").innerHTML = "Status: Crime Selected"
             if (await PoliceDataFetch(false)) {
                 PopulateTable(await QueryResponse)
@@ -120,6 +137,7 @@ document.querySelector("#Submit").addEventListener("click", async function (even
 
         } else {
             if (CrimeSelected[0]) { // Checks that some specific Crime is selected
+
                 document.querySelector("#Status").innerHTML = "Status: Crime not Selected"
                 if (await PoliceDataFetch(true)) {
                     PopulateTable(await QueryResponse)
@@ -188,17 +206,25 @@ async function PoliceDataFetch(CrimeFlag) {
 
 function PopulateTable(data) {
 
+    if(!data){ //Important check to see if their is any data avalible from the API, ussually means the data is not yet avalible for this date 
+        document.querySelector("#Status").innerHTML = "Status: No data yet for the ".concat(document.querySelector("#date").value);
+        return
+    };
+
 
     data.forEach(event => {
         document.querySelector("#Status").innerHTML = "Status: Populating Table"
         var data = [event.id || 'Missing Data', event.month || 'Missing Data', (event.location && event.location.street && event.location.street.name) || 'Missing Data',
-        event.category || 'Missing Data', (event.outcome_status && event.outcome_status.category) || 'Missing Data'];
-
-
+        event.category || 'Missing Data', (event.outcome_status && event.outcome_status.category) || 'Missing Data']; // Creates an array and fills gaps to prevent breaking of the table population function below
+        
+       
         let createTr = document.createElement("tr");
         try {
+            console.log(event.location.latitude)
+            console.log(event)
+            L.marker([event.location.latitude, event.location.longitude]).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h21><br>" , "<p id='marker'>" , data[3] , " Happened " , data[2] , " on the " , data[1]) , "</p");
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
-            for (let x = 0; x <= 4; x++) {
+            for (let x = 0; x <= 4; x++) { //loops thought 5 table rows, using x to populate table with the var data
                 document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
             }
         } catch (error) {
@@ -206,6 +232,6 @@ function PopulateTable(data) {
             console.log("Missing Data, Error " + error)
 
         };
-        document.querySelector("#Status").innerHTML = "Status: Table populated, using date: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in area: ", postcode,);
+        document.querySelector("#Status").innerHTML = "Status: Table Filled, date used: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in: ", postcode,);
     });
 };
