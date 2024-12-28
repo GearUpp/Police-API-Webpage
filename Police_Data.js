@@ -8,7 +8,7 @@ let crimeList = "";
 let CrimeSelected = []; //DropDown Selection var [Name , url]
 let QueryResponse; //Full data response from Police API Request
 
-//document.querySelector("#date").createAttribute("max=" + currentDate.concat); //Limit how close to current date user can select as data is rarely very up to date, 2 month lag
+//Limit how close to current date user can select as data is rarely very up to date, 2 month lag
 
 //Map Area
 
