@@ -89,7 +89,7 @@ async function postcodeValidate(postcode) {
         if (PostcodeData_Raw.status == 200) {
             //console.log("Valid postcode Data")
             //Returns formated lang and long for postcode ready to be inserted into any Police data API
-            console.log("lat=" + PostcodeData_Raw.result.latitude + "&lng=" + PostcodeData_Raw.result.longitude);
+            
             PostcodeData = { "latitude": PostcodeData_Raw.result.latitude, "longitude": PostcodeData_Raw.result.longitude };
             map.setView([PostcodeData.latitude,PostcodeData.longitude], 13);
             return PostcodeData;
@@ -154,7 +154,7 @@ document.querySelector("#Submit").addEventListener("click", async function (even
 
 // Identify  Crime selected
 
-document.querySelector("#Crime_Drop ul").addEventListener('click', function (a) {
+document.querySelector("ul").addEventListener('click', function (a) {
     document.querySelector("#Status").innerHTML = "Status:  '".concat(a.target.innerHTML, " 'Selected")
     CrimeSelected[0] = a.target.innerHTML;
     CrimeSelected[1] = a.target.id;
@@ -176,7 +176,6 @@ async function PoliceDataFetch(CrimeFlag) {
             QueryResponseRAW = await fetch(PoliceAPI + "crimes-street/all-crime?&date=" + currentDate + "&lat=" + PostcodeData["latitude"].toString() + "&lng=" + PostcodeData["longitude"].toString());
         };
         console.log("Fetch done");
-        console.log(QueryResponseRAW.status);
         document.querySelector("#Status").innerHTML = "Status: Fetching Done."
         if (QueryResponseRAW.status = 200) {
             try {
@@ -218,11 +217,9 @@ function PopulateTable(data) {
         var data = [event.id || 'Data Missing', event.month || 'Data Missing', (event.location && event.location.street && event.location.street.name) || 'Data Missing',
         event.category || 'Data Missing', (event.outcome_status && event.outcome_status.category) || 'Data Missing']; // Creates an array and fills gaps to prevent breaking of the table population function below
         
-       
         let createTr = document.createElement("tr");
+
         try {
-            console.log(event.location.latitude)
-            console.log(event)
             L.marker([event.location.latitude, event.location.longitude]).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p"));
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
             for (let x = 0; x <= 4; x++) { //loops thought 5 table rows, using x to populate table with the var data
