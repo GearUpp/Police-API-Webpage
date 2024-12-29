@@ -24,22 +24,26 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 function filter() {
     var idSearch, idRow, streetRow, streetSearch;
     idSearch = document.querySelector("#idFilter").value.toString().toUpperCase();
+    
     idRow = 0;
 
     streetSearch = document.querySelector("#streetFilter").value.toString().toUpperCase();
     streetRow = 2;
 
-
-
     var table = document.querySelector("#outputTable tbody");
     var tr = table.getElementsByTagName("tr");
+
     for (i = 0; i < tr.length; i++) {
         var idText = tr[i].childNodes[idRow].innerHTML.toString().toUpperCase() || tr[i].childNodes[idRow].innnerText.toString().toUpperCase();
         var streetText = tr[i].childNodes[streetRow].innerHTML.toString().toUpperCase() || tr[i].childNodes[streetRow].innnerText.toString().toUpperCase();
         if (idText.indexOf(idSearch) > -1 &&  streetText.indexOf(streetSearch) > -1) {
             tr[i].style.display = "";
+            console.log(idText.toString());
+            document.querySelector("img[title='".concat(idText.toString(), "'")).style.display = "";
         } else {
             tr[i].style.display = "none";
+            document.querySelector("img[title='".concat(idText.toString(), "'")).style.display = "none";
+            
         };
         console.log("idText: "+ idText + " idSearch: " + idSearch + "idSearch: "+ idSearch)
     };
@@ -181,7 +185,7 @@ async function PoliceDataFetch(CrimeFlag) {
             try {
                 QueryResponseRAW = await QueryResponseRAW.json();
                 QueryResponse = QueryResponseRAW
-                console.log(QueryResponse)
+                
             } catch (error) {
                 console.log("Failed to extract API data, Error: " + error);
                 document.querySelector("#Status").innerHTML = "Status: Failed to extract data from Police API."
@@ -210,17 +214,20 @@ function PopulateTable(data) {
         document.querySelector("#Status").innerHTML = "Status: No data yet for the ".concat(document.querySelector("#date").value);
         return
     };
-
+    let i; // Will be used to give each marker on the map the event id as title.
 
     data.forEach(event => {
         document.querySelector("#Status").innerHTML = "Status: Populating Table"
         var data = [event.id || 'Data Missing', event.month || 'Data Missing', (event.location && event.location.street && event.location.street.name) || 'Data Missing',
         event.category || 'Data Missing', (event.outcome_status && event.outcome_status.category) || 'Data Missing']; // Creates an array and fills gaps to prevent breaking of the table population function below
+        i = event.id
         
         let createTr = document.createElement("tr");
 
         try {
-            L.marker([event.location.latitude, event.location.longitude]).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p"));
+            
+            L.marker([event.location.latitude, event.location.longitude],{ title: i.toString()} ).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p"));
+            //document.querySelector
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
             for (let x = 0; x <= 4; x++) { //loops thought 5 table rows, using x to populate table with the var data
                 document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
