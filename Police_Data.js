@@ -22,6 +22,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 //Map Area
 
 function filter() {
+    document.querySelector(".leaflet-shadow-pane").style.display = "none"; // hides markers shadows to deuglify the map
     var idSearch, idRow, streetRow, streetSearch;
     idSearch = document.querySelector("#idFilter").value.toString().toUpperCase();
     
@@ -39,10 +40,10 @@ function filter() {
         if (idText.indexOf(idSearch) > -1 &&  streetText.indexOf(streetSearch) > -1) {
             tr[i].style.display = "";
             console.log(idText.toString());
-            document.querySelector("img[title='".concat(idText.toString(), "'")).style.display = "";
+            document.querySelector("img[title='".concat(idText.toString(), "'")).style.display = ""; // Marker Image show
         } else {
             tr[i].style.display = "none";
-            document.querySelector("img[title='".concat(idText.toString(), "'")).style.display = "none";
+            document.querySelector("img[title='".concat(idText.toString(), "'")).style.display = "none";// Marker Image hide
             
         };
         console.log("idText: "+ idText + " idSearch: " + idSearch + "idSearch: "+ idSearch)
@@ -217,16 +218,20 @@ function PopulateTable(data) {
     let i; // Will be used to give each marker on the map the event id as title.
 
     data.forEach(event => {
+        var jitter = (Math.round((Math.random() * 10)) / 10000); // used to move around all markers slightly to give spacing (make devisible number bigger for a smaller jitter)
         document.querySelector("#Status").innerHTML = "Status: Populating Table"
         var data = [event.id || 'Data Missing', event.month || 'Data Missing', (event.location && event.location.street && event.location.street.name) || 'Data Missing',
         event.category || 'Data Missing', (event.outcome_status && event.outcome_status.category) || 'Data Missing']; // Creates an array and fills gaps to prevent breaking of the table population function below
         i = event.id
         
-        let createTr = document.createElement("tr");
-
+        var createTr = document.createElement("tr");
         try {
+            var eventmarkerLat = Number(event.location.latitude) + jitter;
+            var eventmarkerLon = Number(event.location.longitude) + jitter;
             
-            L.marker([event.location.latitude, event.location.longitude],{ title: i.toString()} ).addTo(map).bindPopup("<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p"));
+
+            var eventInfo = "<h2> Event ID: ".concat(data[0], "</h2>" , "<p id='marker'>" , data[3] , " happened " , data[2] , " on the " , data[1] , ",<b> Conclusion: </b>", data[4], "</p");
+            L.marker([eventmarkerLat, eventmarkerLon],{ title: i.toString()} ).addTo(map).bindPopup(eventInfo);
             //document.querySelector
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
             for (let x = 0; x <= 4; x++) { //loops thought 5 table rows, using x to populate table with the var data
