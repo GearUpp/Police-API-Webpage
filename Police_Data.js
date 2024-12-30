@@ -218,7 +218,7 @@ function PopulateTable(data) {
     let i; // Will be used to give each marker on the map the event id as title.
 
     data.forEach(event => {
-        var jitter = (Math.round((Math.random() * 10)) / 10000); // used to move around all markers slightly to give spacing (make devisible number bigger for a smaller jitter)
+        var jitter = (Math.round((Math.random() * 10)) / 105000); // used to move around all markers slightly to give spacing (make devisible number bigger for a smaller jitter)
         document.querySelector("#Status").innerHTML = "Status: Populating Table"
         var data = [event.id || 'Data Missing', event.month || 'Data Missing', (event.location && event.location.street && event.location.street.name) || 'Data Missing',
         event.category || 'Data Missing', (event.outcome_status && event.outcome_status.category) || 'Data Missing']; // Creates an array and fills gaps to prevent breaking of the table population function below
