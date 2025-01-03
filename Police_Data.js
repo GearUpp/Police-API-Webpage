@@ -210,7 +210,7 @@ async function PoliceDataFetch(CrimeFlag) {
 //All Police API Requests
 
 function PopulateTable(data) {
-
+    console.log(data)
     if(data.length == 0){ //Important check to see if their is any data avalible from the API, ussually means the data is not yet avalible for this date 
         document.querySelector("#Status").innerHTML = "Status: No data yet for the ".concat(document.querySelector("#date").value);
         return
