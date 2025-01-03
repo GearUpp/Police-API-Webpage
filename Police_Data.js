@@ -2,16 +2,14 @@ let postcode = "";
 let PoliceAPI = "https://data.police.uk/api/"  //API for police data
 let PostcodeAPI = "api.postcodes.io/postcodes/" //API for getting postcode data
 var postcoderegx = /^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})$/;
-let currentDate = (new Date().getFullYear() + "-" + (new Date().getMonth() - 1)); // Get month and Year only
+let EpocDate = new Date((new Date() - 7000000000)); //Moves time ~2 Month Back to prevent API breakage
+let currentDate = (EpocDate.getFullYear() + "-" + (EpocDate.getMonth() + 1)); // Get month and Year only
 let PostcodeData = ""; //Postcode.io API var to all postcode related data from the API
 let crimeList = "";
 let CrimeSelected = []; //DropDown Selection var [Name , url]
 let QueryResponse; //Full data response from Police API Request
 
-//Limit how close to current date user can select as data is rarely very up to date, 2 month lag
-
-//Map Area
-
+//Map Generating Area
 var map = L.map('map').setView([53.38, -2.7], 5);
 
 
@@ -19,7 +17,7 @@ L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(map);
-//Map Area
+//Map Generating Area
 
 function filter() {
     document.querySelector(".leaflet-shadow-pane").style.display = "none"; // hides markers shadows to deuglify the map
@@ -46,7 +44,7 @@ function filter() {
             document.querySelector("img[title='".concat(idText.toString(), "'")).style.display = "none";// Marker Image hide
             
         };
-        console.log("idText: "+ idText + " idSearch: " + idSearch + "idSearch: "+ idSearch)
+        
     };
 };
 
