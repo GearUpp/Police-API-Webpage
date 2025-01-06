@@ -1,6 +1,6 @@
 let postcode = "";
-let PoliceAPI = "https://data.police.uk/api/"  //API for police data
-let PostcodeAPI = "api.postcodes.io/postcodes/" //API for getting postcode data
+let PoliceAPI = "https://data.police.uk/api/";  //API for police data
+let PostcodeAPI = "api.postcodes.io/postcodes/"; //API for getting postcode data
 var postcoderegx = /^([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1,2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1,2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})$/;
 let EpocDate = new Date((new Date() - 7000000000)); //Moves time ~2 Month Back to prevent API breakage
 let currentDate = (EpocDate.getFullYear() + "-" + (EpocDate.getMonth() + 1)); // Get month and Year only
@@ -168,7 +168,7 @@ document.querySelector("ul").addEventListener('click', function (a) {
 
 //All Police API Requests
 async function PoliceDataFetch(CrimeFlag) {
-    document.querySelector("#Status").innerHTML = "Status: Fetching Data"
+    document.querySelector("#Status").innerHTML = "Status: Fetching Data";
     var QueryResponseRAW;
     try {
         if (CrimeFlag == true) {
@@ -204,15 +204,15 @@ async function PoliceDataFetch(CrimeFlag) {
 
         return false;
     }
-};
+}
 //All Police API Requests
 
 function PopulateTable(data) {
-    console.log(data)
+
     if(data.length == 0){ //Important check to see if their is any data avalible from the API, ussually means the data is not yet avalible for this date 
         document.querySelector("#Status").innerHTML = "Status: No data yet for the ".concat(document.querySelector("#date").value);
-        return
-    };
+        return;
+    }
     let i; // Will be used to give each marker on the map the event id as title.
 
     data.forEach(event => {
@@ -233,13 +233,13 @@ function PopulateTable(data) {
             //document.querySelector
             document.querySelector("#outputTable tbody").appendChild(createTr).id = "API Data";
             for (let x = 0; x <= 4; x++) { //loops thought 5 table rows, using x to populate table with the var data
-                document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x]
+                document.querySelector("#outputTable tbody:last-child tr:last-child ").appendChild(document.createElement("td")).innerHTML = data[x];
             }
         } catch (error) {
             document.querySelector("#Status").innerHTML = "Status: Catching errors within API data"
-            console.log("Data Missing, Error " + error)
+            console.log("Data Missing, Error " + error);
 
         };
-        document.querySelector("#Status").innerHTML = "Status: Table Filled, date used: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in: ", postcode,);
+        document.querySelector("#Status").innerHTML = "Status: Table Filled, date used: ".concat(currentDate, ", Crime Selected: ", CrimeSelected[0], ", in: ", postcode);
     });
-};
+}
